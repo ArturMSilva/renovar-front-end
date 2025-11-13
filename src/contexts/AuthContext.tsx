@@ -7,6 +7,7 @@ interface CustomUser {
   email: string;
   name: string;
   account_type?: 'residential' | 'business' | null;
+  profileCompleted?: boolean;
 }
 
 interface AuthContextType {
@@ -18,7 +19,6 @@ interface AuthContextType {
   quickSignUp: (email: string, password: string, name: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   completeProfile: (metadata: CompleteProfileMetadata) => Promise<string>;
-  hasCompleteProfile: () => Promise<boolean>;
 }
 
 interface SignUpMetadata {
@@ -62,16 +62,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se há token salvo
     const token = localStorage.getItem('authToken');
-    if (token) {
+    const savedUser = localStorage.getItem('currentUser');
+    
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else if (token) {
       const decoded = decodeToken(token);
       if (decoded) {
         setUser({
-          id: decoded.sub || decoded.userId,
+          id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email,
-          name: decoded.name,
-          account_type: decoded.accountType,
+          name: decoded.name || decoded.username,
+          account_type: null,
         });
       }
     }
@@ -81,16 +84,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     try {
       const response = await authApi.login({ email, password });
-      
-      // Decodifica o token para obter informações do usuário
       const decoded = decodeToken(response.token);
       
       if (decoded) {
+        const accountType: 'residential' | 'business' | null = response.profileCompleted 
+          ? (response.userType || 'business') 
+          : null;
+        
         const customUser: CustomUser = {
-          id: decoded.sub || decoded.userId,
+          id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email || email,
-          name: decoded.name || '',
-          account_type: decoded.accountType,
+          name: decoded.name || decoded.username || '',
+          account_type: accountType,
+          profileCompleted: response.profileCompleted,
         };
         
         setUser(customUser);
@@ -102,7 +108,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signUp = async (_email: string, _password: string, _metadata: SignUpMetadata) => {
-    // Esta função não será usada por enquanto
     throw new Error('Use quickSignUp instead');
   };
 
@@ -115,9 +120,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const quickSignUp = async (email: string, password: string, name: string) => {
     try {
       await authApi.register({ email, password, name });
-      
-      // NÃO faz login automaticamente - usuário deve ir para tela de confirmação
-      // e depois fazer login manualmente
     } catch (error: any) {
       if (error.message?.includes('já está cadastrado') || error.message?.includes('already')) {
         throw new Error('Este email já está cadastrado');
@@ -130,11 +132,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     throw new Error('Google login not implemented for custom users');
   };
 
-  const hasCompleteProfile = async (): Promise<boolean> => {
-    // Verifica se o usuário tem account_type definido
-    return !!user?.account_type;
-  };
-
   const completeProfile = async (metadata: CompleteProfileMetadata): Promise<string> => {
     if (!user) throw new Error('User not authenticated');
 
@@ -142,8 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       let clientId = '';
       
       if (metadata.accountType === 'residential') {
-        // Chamar API de residência
-        const response = await residenceApi.completeProfile({
+        await residenceApi.completeProfile({
           telefone: metadata.phone,
           cpf: metadata.cpf,
           numberResidents: metadata.residentsCount ? parseInt(metadata.residentsCount) : 1,
@@ -158,12 +154,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         });
         
-        // Captura o ID do cliente da resposta
-        clientId = response.id || response.clientId || response.userId || user.id;
+        const idResponse = await residenceApi.getId();
+        clientId = idResponse.id || '';
         
       } else if (metadata.accountType === 'business') {
-        // Chamar API de empresa
-        const response = await companyApi.completeProfile({
+        await companyApi.completeProfile({
           telefone: metadata.phone,
           cnpj: metadata.cnpj,
           addressRequest: {
@@ -177,14 +172,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         });
         
-        // Captura o ID do cliente da resposta
-        clientId = response.id || response.clientId || response.userId || user.id;
+        const idResponse = await companyApi.getId();
+        clientId = idResponse.id || '';
       }
 
-      // Atualizar usuário localmente
       const updatedUser = { 
         ...user, 
-        account_type: metadata.accountType 
+        account_type: metadata.accountType,
+        profileCompleted: true,
       };
       setUser(updatedUser);
       localStorage.setItem('currentUser', JSON.stringify(updatedUser));
@@ -205,7 +200,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       quickSignUp,
       signInWithGoogle,
       completeProfile,
-      hasCompleteProfile,
     }}>
       {children}
     </AuthContext.Provider>
