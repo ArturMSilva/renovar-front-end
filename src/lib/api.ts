@@ -1,4 +1,29 @@
+import axios from 'axios';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error.response?.data?.message || `Erro na requisição: ${error.response?.status || 'Desconhecido'}`;
+    throw new Error(message);
+  }
+);
 
 interface RegisterRequest {
   name: string;
@@ -13,6 +38,8 @@ interface LoginRequest {
 
 interface LoginResponse {
   token: string;
+  profileCompleted: boolean;
+  userType: 'residential' | 'business' | null;
 }
 
 interface ResidenceProfileRequest {
@@ -51,85 +78,43 @@ interface CompanyProfileRequest {
   };
 }
 
-// Helper para fazer requisições
-const apiRequest = async <T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> => {
-  const token = localStorage.getItem('authToken');
-  
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
-
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `Erro na requisição: ${response.status}`);
-  }
-
-  // Verifica se a resposta tem conteúdo antes de tentar fazer o parse do JSON
-  const text = await response.text();
-  if (!text || text.trim() === '') {
-    return {} as T; // Retorna objeto vazio se não houver conteúdo
-  }
-  
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    console.error('Erro ao fazer parse do JSON:', text);
-    return {} as T; // Retorna objeto vazio se o JSON for inválido
-  }
-};
-
 // Autenticação
 export const authApi = {
   register: async (data: RegisterRequest) => {
-    const response = await apiRequest<{ message: string }>('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    return response;
+    const response = await axiosInstance.post<{ message: string }>('/api/auth/register', data);
+    return response.data;
   },
 
   login: async (data: LoginRequest) => {
-    const response = await apiRequest<LoginResponse>('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    
-    // Salva o token no localStorage
-    localStorage.setItem('authToken', response.token);
-    
-    return response;
+    const response = await axiosInstance.post<LoginResponse>('/api/auth/login', data);
+    localStorage.setItem('authToken', response.data.token);
+    return response.data;
   },
 };
 
 // Perfil de Residência
 export const residenceApi = {
   completeProfile: async (data: ResidenceProfileRequest) => {
-    const response = await apiRequest<ProfileResponse>('/api/residence/complete-profile', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    return response;
+    const response = await axiosInstance.post<ProfileResponse>('/api/residence/complete-profile', data);
+    return response.data;
+  },
+  
+  getId: async () => {
+    const response = await axiosInstance.get<{ id: string }>('/api/residence/get-id');
+    return response.data;
   },
 };
 
 // Perfil de Empresa
 export const companyApi = {
   completeProfile: async (data: CompanyProfileRequest) => {
-    const response = await apiRequest<ProfileResponse>('/api/company/complete-profile', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    return response;
+    const response = await axiosInstance.post<ProfileResponse>('/api/company/complete-profile', data);
+    return response.data;
+  },
+  
+  getId: async () => {
+    const response = await axiosInstance.get<{ id: string }>('/api/company/get-id');
+    return response.data;
   },
 };
 
