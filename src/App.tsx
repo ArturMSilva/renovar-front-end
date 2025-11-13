@@ -9,7 +9,6 @@ import { CompleteBusiness } from './pages/CompleteBusiness';
 import { FinalConfirmation } from './pages/FinalConfirmation';
 import { Dashboard } from './pages/Dashboard';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { useEffect, useState } from 'react';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -26,25 +25,9 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const DashboardRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading, hasCompleteProfile } = useAuth();
-  const [checkingProfile, setCheckingProfile] = useState(true);
-  const [profileComplete, setProfileComplete] = useState(false);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkProfile = async () => {
-      if (user) {
-        const isComplete = await hasCompleteProfile();
-        setProfileComplete(isComplete);
-      }
-      setCheckingProfile(false);
-    };
-
-    if (!loading) {
-      checkProfile();
-    }
-  }, [user, loading, hasCompleteProfile]);
-
-  if (loading || checkingProfile) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size={48} />
@@ -56,7 +39,7 @@ const DashboardRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/" />;
   }
 
-  if (!profileComplete) {
+  if (!user.profileCompleted) {
     return <Navigate to="/select-account-type" />;
   }
 
@@ -64,25 +47,9 @@ const DashboardRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading, hasCompleteProfile } = useAuth();
-  const [checkingProfile, setCheckingProfile] = useState(true);
-  const [profileComplete, setProfileComplete] = useState(false);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkProfile = async () => {
-      if (user) {
-        const isComplete = await hasCompleteProfile();
-        setProfileComplete(isComplete);
-      }
-      setCheckingProfile(false);
-    };
-
-    if (!loading) {
-      checkProfile();
-    }
-  }, [user, loading, hasCompleteProfile]);
-
-  if (loading || (user && checkingProfile)) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size={48} />
@@ -90,11 +57,11 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (user && !profileComplete) {
+  if (user && !user.profileCompleted) {
     return <Navigate to="/select-account-type" />;
   }
 
-  return user && profileComplete ? <Navigate to="/dashboard" /> : <>{children}</>;
+  return user && user.profileCompleted ? <Navigate to="/dashboard" /> : <>{children}</>;
 };
 
 function AppRoutes() {
