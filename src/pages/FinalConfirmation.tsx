@@ -1,11 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { BadgeCheck, Lightbulb} from "lucide-react";
 import { Button } from "../components/Button";
+import { formatUserId } from "../utils/validation";
 
 export const FinalConfirmation = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = location.state?.userId || "0010";
+  const rawUserId = location.state?.userId || "0000";
+  const userId = formatUserId(rawUserId);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#10B981] to-[#059669]">
@@ -14,10 +16,6 @@ export const FinalConfirmation = () => {
           <div className="w-20 h-20 bg-[#10B981] rounded-full flex items-center justify-center mb-6">
             <BadgeCheck size={48} className="text-[#ffffff]" />
           </div>
-
-          {/* <div className="w-16 h-16 bg-[#10B981]/10 rounded-full flex items-center justify-center mb-6">
-            <Recycle size={32} className="text-[#10B981]" />
-          </div> */}
 
           <h1 className="text-3xl font-bold text-[#1A1F36] mb-4">
             Cadastro Concluído!
