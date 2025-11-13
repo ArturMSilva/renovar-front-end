@@ -111,3 +111,8 @@ export const formatCNPJ = (value: string): string => {
     .replace(/(\d{3})(\d)/, '$1/$2')
     .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
 };
+
+export const formatUserId = (id: string | number): string => {
+  const numericId = typeof id === 'string' ? id.replace(/\D/g, '') : String(id);
+  return numericId.padStart(4, '0');
+};
