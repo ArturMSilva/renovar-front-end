@@ -77,7 +77,6 @@ interface CompanyProfileRequest {
   };
 }
 
-// Autenticação
 export const authApi = {
   register: async (data: RegisterRequest) => {
     const response = await axiosInstance.post<{ message: string }>('/api/auth/register', data);
@@ -91,7 +90,6 @@ export const authApi = {
   },
 };
 
-// Perfil de Residência
 export const residenceApi = {
   completeProfile: async (data: ResidenceProfileRequest) => {
     const response = await axiosInstance.post<ProfileResponse>('/api/residence/complete-profile', data);
@@ -99,7 +97,6 @@ export const residenceApi = {
   },
 };
 
-// Perfil de Empresa
 export const companyApi = {
   completeProfile: async (data: CompanyProfileRequest) => {
     const response = await axiosInstance.post<ProfileResponse>('/api/company/complete-profile', data);
@@ -107,7 +104,6 @@ export const companyApi = {
   },
 };
 
-// Decodifica o JWT para obter informações do usuário
 export const decodeToken = (token: string) => {
   try {
     const base64Url = token.split('.')[1];
