@@ -38,8 +38,7 @@ interface LoginRequest {
 
 interface LoginResponse {
   token: string;
-  profileCompleted: boolean;
-  userType: 'residential' | 'business' | null;
+  registered: boolean; 
 }
 
 interface ResidenceProfileRequest {
@@ -58,7 +57,7 @@ interface ResidenceProfileRequest {
 }
 
 interface ProfileResponse {
-  id?: string;
+  Id?: string;  
   clientId?: string;
   userId?: string;
   message?: string;
@@ -98,22 +97,12 @@ export const residenceApi = {
     const response = await axiosInstance.post<ProfileResponse>('/api/residence/complete-profile', data);
     return response.data;
   },
-  
-  getId: async () => {
-    const response = await axiosInstance.get<{ id: string }>('/api/residence/get-id');
-    return response.data;
-  },
 };
 
 // Perfil de Empresa
 export const companyApi = {
   completeProfile: async (data: CompanyProfileRequest) => {
     const response = await axiosInstance.post<ProfileResponse>('/api/company/complete-profile', data);
-    return response.data;
-  },
-  
-  getId: async () => {
-    const response = await axiosInstance.get<{ id: string }>('/api/company/get-id');
     return response.data;
   },
 };
