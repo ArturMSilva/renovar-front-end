@@ -58,7 +58,6 @@ export const CompleteBusiness = () => {
     handleChange("cep", formatted);
   };
 
-  // Hook para busca automática de CEP
   useAutoFetchCEP({
     cep: formData.cep,
     onSuccess: (data) => {
@@ -87,7 +86,6 @@ export const CompleteBusiness = () => {
       newErrors.companyName = "Razão social deve ter pelo menos 3 caracteres";
     }
 
-    // CNPJ é opcional, mas se preenchido deve ser válido
     if (formData.cnpj && !validateCNPJ(formData.cnpj)) {
       newErrors.cnpj = "CNPJ inválido";
     }
