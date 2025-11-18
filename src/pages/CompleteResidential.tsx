@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, MapPin, Recycle, IdCard, Users} from 'lucide-react';
 import { Input } from '../components/Input';
@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { useAuth } from '../contexts/AuthContext';
 import { validatePhone, validateCEP, validateCPF, formatPhone, formatCEP, formatCPF } from '../utils/validation';
-import { fetchCEP } from '../utils/cep';
+import { useAutoFetchCEP } from '../hooks/useAutoFetchCEP';
 
 export const CompleteResidential = () => {
   const navigate = useNavigate();
@@ -51,33 +51,24 @@ export const CompleteResidential = () => {
     handleChange('cep', formatted);
   };
 
-  // Busca automática de CEP quando completo
-  useEffect(() => {
-    const fetchAddressAutomatically = async () => {
-      if (validateCEP(formData.cep)) {
-        setLoadingCEP(true);
-        const data = await fetchCEP(formData.cep);
-        setLoadingCEP(false);
-
-        if (data) {
-          setFormData((prev) => ({
-            ...prev,
-            street: data.logradouro,
-            neighborhood: data.bairro,
-            city: data.localidade,
-            state: data.uf,
-          }));
-          setErrors((prev) => ({ ...prev, cep: '' }));
-        } else {
-          setErrors((prev) => ({ ...prev, cep: 'CEP não encontrado' }));
-        }
-      }
-    };
-
-    // Debounce: aguarda 500ms após o usuário parar de digitar
-    const timeoutId = setTimeout(fetchAddressAutomatically, 500);
-    return () => clearTimeout(timeoutId);
-  }, [formData.cep]);
+  // Hook para busca automática de CEP
+  useAutoFetchCEP({
+    cep: formData.cep,
+    onSuccess: (data) => {
+      setFormData((prev) => ({
+        ...prev,
+        street: data.street,
+        neighborhood: data.neighborhood,
+        city: data.city,
+        state: data.state,
+      }));
+      setErrors((prev) => ({ ...prev, cep: '' }));
+    },
+    onError: (error) => {
+      setErrors((prev) => ({ ...prev, cep: error }));
+    },
+    setLoading: setLoadingCEP,
+  });
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
