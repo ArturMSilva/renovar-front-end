@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authApi, residenceApi, companyApi, decodeToken } from '../lib/api';
 
-// Interface customizada para usuário
 interface CustomUser {
   id: string;
   email: string;
@@ -14,27 +13,10 @@ interface AuthContextType {
   user: CustomUser | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, metadata: SignUpMetadata) => Promise<{ userId: string }>;
   signOut: () => Promise<void>;
   quickSignUp: (email: string, password: string, name: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   completeProfile: (metadata: CompleteProfileMetadata) => Promise<string>;
-}
-
-interface SignUpMetadata {
-  name: string;
-  accountType: 'residential' | 'business';
-  phone: string;
-  address: {
-    cep: string;
-    street: string;
-    number: string;
-    complement?: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-  };
-  companyName?: string;
 }
 
 interface CompleteProfileMetadata {
@@ -52,7 +34,6 @@ interface CompleteProfileMetadata {
     city: string;
     state: string;
   };
-  companyName?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -87,16 +68,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decoded = decodeToken(response.token);
       
       if (decoded) {
-        const accountType: 'residential' | 'business' | null = response.profileCompleted 
-          ? (response.userType || 'business') 
-          : null;
-        
         const customUser: CustomUser = {
           id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email || email,
           name: decoded.name || decoded.username || '',
-          account_type: accountType,
-          profileCompleted: response.profileCompleted,
+          account_type: response.registered ? (decoded.userType || null) : null,
+          profileCompleted: response.registered,
         };
         
         setUser(customUser);
@@ -105,10 +82,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error: any) {
       throw new Error(error.message || 'Email ou senha incorretos');
     }
-  };
-
-  const signUp = async (_email: string, _password: string, _metadata: SignUpMetadata) => {
-    throw new Error('Use quickSignUp instead');
   };
 
   const signOut = async () => {
@@ -129,7 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signInWithGoogle = async () => {
-    throw new Error('Google login not implemented for custom users');
+    throw new Error('Login com Google ainda não implementado no frontend');
   };
 
   const completeProfile = async (metadata: CompleteProfileMetadata): Promise<string> => {
@@ -139,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       let clientId = '';
       
       if (metadata.accountType === 'residential') {
-        await residenceApi.completeProfile({
+        const response = await residenceApi.completeProfile({
           telefone: metadata.phone,
           cpf: metadata.cpf,
           numberResidents: metadata.residentsCount ? parseInt(metadata.residentsCount) : 1,
@@ -154,11 +127,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         });
         
-        const idResponse = await residenceApi.getId();
-        clientId = idResponse.id || '';
+        clientId = response.Id || response.clientId || response.userId || '';
         
       } else if (metadata.accountType === 'business') {
-        await companyApi.completeProfile({
+        const response = await companyApi.completeProfile({
           telefone: metadata.phone,
           cnpj: metadata.cnpj,
           addressRequest: {
@@ -172,8 +144,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         });
         
-        const idResponse = await companyApi.getId();
-        clientId = idResponse.id || '';
+        clientId = response.Id || response.clientId || response.userId || '';
       }
 
       const updatedUser = { 
@@ -195,7 +166,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       user, 
       loading, 
       signIn, 
-      signUp, 
       signOut,
       quickSignUp,
       signInWithGoogle,
