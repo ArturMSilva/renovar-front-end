@@ -43,7 +43,7 @@ function AppRoutes() {
     }
 
     if (!user.profileCompleted) {
-      return <Navigate to="/select-account-type" />;
+      return <Navigate to="/selecionar-tipo-conta" />;
     }
 
     return <>{children}</>;
@@ -61,10 +61,10 @@ function AppRoutes() {
     }
 
     if (user && !user.profileCompleted) {
-      return <Navigate to="/select-account-type" />;
+      return <Navigate to="/selecionar-tipo-conta" />;
     }
 
-    return user && user.profileCompleted ? <Navigate to="/dashboard" /> : <>{children}</>;
+    return user && user.profileCompleted ? <Navigate to="/painel" /> : <>{children}</>;
   };
 
 
@@ -80,7 +80,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/quick-signup"
+        path="/cadastro"
         element={
           <PublicRoute>
             <QuickSignup />
@@ -89,7 +89,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/initial-confirmation"
+        path="/confirmacao-inicial"
         element={
           <PublicRoute>
             <InitialConfirmation />
@@ -98,7 +98,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/select-account-type"
+        path="/selecionar-tipo-conta"
         element={
           <PrivateRoute>
             <SelectAccountType />
@@ -107,7 +107,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/complete-residential"
+        path="/completar-residencial"
         element={
           <PrivateRoute>
             <CompleteResidential />
@@ -116,7 +116,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/complete-business"
+        path="/completar-empresa"
         element={
           <PrivateRoute>
             <CompleteBusiness />
@@ -125,7 +125,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/final-confirmation"
+        path="/confirmacao-final"
         element={
           <PrivateRoute>
             <FinalConfirmation />
@@ -134,7 +134,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/dashboard"
+        path="/painel"
         element={
           <DashboardRoute>
             <Dashboard />
@@ -143,7 +143,7 @@ function AppRoutes() {
       />
       
       <Route
-        path="/onboarding"
+        path="/introducao"
         element={
           <DashboardRoute>
             <Onboarding />

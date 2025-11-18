@@ -51,7 +51,7 @@ export const DonationHistory = () => {
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center h-14">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/painel')}
               className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft size={20} />

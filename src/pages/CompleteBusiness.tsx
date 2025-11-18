@@ -129,7 +129,7 @@ export const CompleteBusiness = () => {
         },
       });
 
-      navigate("/final-confirmation", { state: { userId } });
+      navigate("/confirmacao-final", { state: { userId } });
     } catch (err: any) {
       setError(err.message || "Erro ao completar cadastro. Tente novamente.");
     } finally {

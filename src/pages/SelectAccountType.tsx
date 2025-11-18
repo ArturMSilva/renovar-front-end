@@ -6,11 +6,11 @@ export const SelectAccountType = () => {
   const navigate = useNavigate();
 
   const handleSelectResidential = () => {
-    navigate('/complete-residential');
+    navigate('/completar-residencial');
   };
 
   const handleSelectBusiness = () => {
-    navigate('/complete-business');
+    navigate('/completar-empresa');
   };
 
   return (

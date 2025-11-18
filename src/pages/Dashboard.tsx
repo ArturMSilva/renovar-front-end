@@ -14,7 +14,7 @@ export const Dashboard = () => {
   useEffect(() => {
     const onboardingCompleted = localStorage.getItem('onboarding-completed');
     if (!onboardingCompleted) {
-      navigate('/onboarding');
+      navigate('/introducao');
     }
   }, [navigate]);
 

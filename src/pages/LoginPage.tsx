@@ -108,7 +108,7 @@ export const LoginPage = () => {
             <div className="text-center">
               <button
                 type="button"
-                onClick={() => navigate('/quick-signup')}
+                onClick={() => navigate('/cadastro')}
                 className="text-sm text-[#3B82F6] hover:underline transition-smooth"
               >
                 Não tem conta? Criar Conta

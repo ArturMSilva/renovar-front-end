@@ -6,7 +6,7 @@ export const AboutRenovar = () => {
 
   return (
     <div 
-      onClick={() => navigate('/onboarding')}
+      onClick={() => navigate('/introducao')}
       className="bg-white rounded-3xl p-6 cursor-pointer hover:shadow-lg transition-all duration-300 group"
     >
       <div className="flex items-center gap-4">

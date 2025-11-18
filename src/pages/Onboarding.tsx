@@ -50,7 +50,7 @@ export const Onboarding = () => {
       setCurrentSlide(currentSlide + 1);
     } else {
       localStorage.setItem('onboarding-completed', 'true');
-      navigate('/dashboard');
+      navigate('/painel');
     }
   };
 

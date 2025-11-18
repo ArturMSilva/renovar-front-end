@@ -45,7 +45,7 @@ export const QuickSignup = () => {
     try {
       setLoading(true);
       await quickSignUp(email, password, name);
-      navigate('/initial-confirmation');
+      navigate('/confirmacao-inicial');
     } catch (err: any) {
       setError(err.message || 'Erro ao criar conta. Tente novamente.');
     } finally {
