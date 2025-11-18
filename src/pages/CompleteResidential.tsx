@@ -51,7 +51,6 @@ export const CompleteResidential = () => {
     handleChange('cep', formatted);
   };
 
-  // Hook para busca automática de CEP
   useAutoFetchCEP({
     cep: formData.cep,
     onSuccess: (data) => {
@@ -77,12 +76,10 @@ export const CompleteResidential = () => {
       newErrors.phone = 'Telefone inválido';
     }
 
-    // CPF é opcional, mas se preenchido deve ser válido
     if (formData.cpf && !validateCPF(formData.cpf)) {
       newErrors.cpf = 'CPF inválido';
     }
 
-    // Quantidade de residentes é obrigatória
     if (!formData.residentsCount.trim()) {
       newErrors.residentsCount = 'Quantidade de moradores é obrigatória';
     } else if (parseInt(formData.residentsCount) < 1) {
