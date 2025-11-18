@@ -6,7 +6,6 @@ import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { useAuth } from '../contexts/AuthContext';
 import { validateEmail } from '../utils/validation';
-import logoRenovar from '../assets/images/logo-renovar.png'
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -58,7 +57,7 @@ export const LoginPage = () => {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#1da74b] to-[#025326] items-center justify-center p-12">
         <div className="text-center text-white max-w-md flex flex-col items-center">
           <div className="flex justify-center mb-6 w-[50%] h-auto bg-white rounded-full p-4">
-            <img src={logoRenovar} alt="Logo" className="text-white" />  
+            <img src="/logo-renovar.png" alt="Logo" className="text-white" />  
           </div>
           <h1 className="text-4xl font-bold mb-4">Projeto Renovar</h1>
           <p className="text-xl text-white/90">
@@ -71,7 +70,7 @@ export const LoginPage = () => {
         <div className="w-full max-w-md">
           <div className="lg:hidden flex justify-center mb-6">
             <div className="w-[50%] h-auto bg-transparent rounded-full flex items-center justify-center">
-              <img src={logoRenovar} alt="Logo" className="text-white" /> 
+              <img src="/logo-renovar.png" alt="Logo" className="text-white" /> 
             </div>
           </div>
 
