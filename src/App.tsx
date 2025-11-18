@@ -10,61 +10,63 @@ import { FinalConfirmation } from './pages/FinalConfirmation';
 import { Dashboard } from './pages/Dashboard';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size={48} />
-      </div>
-    );
-  }
-
-  return user ? <>{children}</> : <Navigate to="/" />;
-};
-
-const DashboardRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size={48} />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/" />;
-  }
-
-  if (!user.profileCompleted) {
-    return <Navigate to="/select-account-type" />;
-  }
-
-  return <>{children}</>;
-};
-
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size={48} />
-      </div>
-    );
-  }
-
-  if (user && !user.profileCompleted) {
-    return <Navigate to="/select-account-type" />;
-  }
-
-  return user && user.profileCompleted ? <Navigate to="/dashboard" /> : <>{children}</>;
-};
-
 function AppRoutes() {
+  // Componentes de rota DENTRO do AppRoutes para ter acesso ao AuthProvider
+  const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingSpinner size={48} />
+        </div>
+      );
+    }
+
+    return user ? <>{children}</> : <Navigate to="/" />;
+  };
+
+  const DashboardRoute = ({ children }: { children: React.ReactNode }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingSpinner size={48} />
+        </div>
+      );
+    }
+
+    if (!user) {
+      return <Navigate to="/" />;
+    }
+
+    if (!user.profileCompleted) {
+      return <Navigate to="/select-account-type" />;
+    }
+
+    return <>{children}</>;
+  };
+
+  const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingSpinner size={48} />
+        </div>
+      );
+    }
+
+    if (user && !user.profileCompleted) {
+      return <Navigate to="/select-account-type" />;
+    }
+
+    return user && user.profileCompleted ? <Navigate to="/dashboard" /> : <>{children}</>;
+  };
+
+
   return (
     <Routes>
       {/* Login principal */}
