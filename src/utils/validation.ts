@@ -18,14 +18,14 @@ export const validateCEP = (cep: string): boolean => {
 };
 
 export const formatPhone = (value: string): string => {
-  const digits = value.replace(/\D/g, '').substring(0, 11); // Limita a 11 dígitos
+  const digits = value.replace(/\D/g, '').substring(0, 11);
   return digits
     .replace(/(\d{2})(\d)/, '($1) $2')
     .replace(/(\d{5})(\d)/, '$1-$2');
 };
 
 export const formatCEP = (value: string): string => {
-  const digits = value.replace(/\D/g, '').substring(0, 8); // Limita a 8 dígitos
+  const digits = value.replace(/\D/g, '').substring(0, 8);
   return digits.replace(/(\d{5})(\d)/, '$1-$2');
 };
 
@@ -33,10 +33,8 @@ export const validateCPF = (cpf: string): boolean => {
   const digits = cpf.replace(/\D/g, '');
   if (digits.length !== 11) return false;
   
-  // Verifica se todos os dígitos são iguais
   if (/^(\d)\1+$/.test(digits)) return false;
   
-  // Validação dos dígitos verificadores
   let sum = 0;
   for (let i = 0; i < 9; i++) {
     sum += parseInt(digits.charAt(i)) * (10 - i);
@@ -57,7 +55,7 @@ export const validateCPF = (cpf: string): boolean => {
 };
 
 export const formatCPF = (value: string): string => {
-  const digits = value.replace(/\D/g, '').substring(0, 11); // Limita a 11 dígitos
+  const digits = value.replace(/\D/g, '').substring(0, 11);
   return digits
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d)/, '$1.$2')
@@ -68,10 +66,8 @@ export const validateCNPJ = (cnpj: string): boolean => {
   const digits = cnpj.replace(/\D/g, '');
   if (digits.length !== 14) return false;
   
-  // Verifica se todos os dígitos são iguais
   if (/^(\d)\1+$/.test(digits)) return false;
   
-  // Validação do primeiro dígito verificador
   let size = digits.length - 2;
   let numbers = digits.substring(0, size);
   const digit1 = digits.substring(size);
@@ -86,7 +82,6 @@ export const validateCNPJ = (cnpj: string): boolean => {
   let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
   if (result !== parseInt(digit1.charAt(0))) return false;
   
-  // Validação do segundo dígito verificador
   size = size + 1;
   numbers = digits.substring(0, size);
   sum = 0;
@@ -104,7 +99,7 @@ export const validateCNPJ = (cnpj: string): boolean => {
 };
 
 export const formatCNPJ = (value: string): string => {
-  const digits = value.replace(/\D/g, '').substring(0, 14); // Limita a 14 dígitos
+  const digits = value.replace(/\D/g, '').substring(0, 14);
   return digits
     .replace(/(\d{2})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d)/, '$1.$2')
