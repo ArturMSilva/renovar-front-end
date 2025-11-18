@@ -8,10 +8,11 @@ import { CompleteResidential } from './pages/CompleteResidential';
 import { CompleteBusiness } from './pages/CompleteBusiness';
 import { FinalConfirmation } from './pages/FinalConfirmation';
 import { Dashboard } from './pages/Dashboard';
+import { DonationHistory } from './pages/DonationHistory';
+import { Onboarding } from './pages/Onboarding';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
 function AppRoutes() {
-  // Componentes de rota DENTRO do AppRoutes para ter acesso ao AuthProvider
   const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     const { user, loading } = useAuth();
 
@@ -69,7 +70,6 @@ function AppRoutes() {
 
   return (
     <Routes>
-      {/* Login principal */}
       <Route
         path="/"
         element={
@@ -79,7 +79,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Cadastro rápido */}
       <Route
         path="/quick-signup"
         element={
@@ -89,7 +88,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Confirmação inicial após cadastro rápido */}
       <Route
         path="/initial-confirmation"
         element={
@@ -99,7 +97,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Seleção de tipo de conta (após login) */}
       <Route
         path="/select-account-type"
         element={
@@ -109,7 +106,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Conclusão de cadastro - Residencial */}
       <Route
         path="/complete-residential"
         element={
@@ -119,7 +115,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Conclusão de cadastro - Empresa */}
       <Route
         path="/complete-business"
         element={
@@ -129,7 +124,6 @@ function AppRoutes() {
         }
       />
       
-      {/* Confirmação final com ID */}
       <Route
         path="/final-confirmation"
         element={
@@ -139,12 +133,29 @@ function AppRoutes() {
         }
       />
       
-      {/* Dashboard */}
       <Route
         path="/dashboard"
         element={
           <DashboardRoute>
             <Dashboard />
+          </DashboardRoute>
+        }
+      />
+      
+      <Route
+        path="/onboarding"
+        element={
+          <DashboardRoute>
+            <Onboarding />
+          </DashboardRoute>
+        }
+      />
+      
+      <Route
+        path="/historico"
+        element={
+          <DashboardRoute>
+            <DonationHistory />
           </DashboardRoute>
         }
       />
