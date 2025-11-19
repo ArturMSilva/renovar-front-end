@@ -38,7 +38,13 @@ interface LoginRequest {
 
 interface LoginResponse {
   token: string;
-  registered: boolean; 
+  registered: boolean;
+  user?: {
+    id?: number;
+    name?: string;
+    email?: string;
+    picture?: string;
+  };
 }
 
 interface ResidenceProfileRequest {
