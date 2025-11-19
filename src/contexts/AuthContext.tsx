@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const customUser: CustomUser = {
           id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email || email,
-          name: decoded.name || decoded.username || '',
+          name: response.name || response.user?.name || decoded.name || decoded.username || '',
           account_type: response.registered ? (decoded.userType || null) : null,
           profileCompleted: response.registered,
         };
@@ -110,8 +110,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (decoded) {
         const customUser: CustomUser = {
           id: decoded.sub || decoded.userId || decoded.id,
-          email: decoded.email || '',
-          name: decoded.name || decoded.username || '',
+          email: decoded.email || response.user?.email || '',
+          name: response.user?.name || decoded.name || decoded.username || '',
           account_type: response.registered ? (decoded.userType || null) : null,
           profileCompleted: response.registered,
         };
