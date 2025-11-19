@@ -5,6 +5,7 @@ interface CustomUser {
   id: string;
   email: string;
   name: string;
+  userCode?: string;
   account_type?: 'residential' | 'business' | null;
   profileCompleted?: boolean;
 }
@@ -15,7 +16,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   quickSignUp: (email: string, password: string, name: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (googleToken: string) => Promise<void>;
   completeProfile: (metadata: CompleteProfileMetadata) => Promise<string>;
 }
 
@@ -101,8 +102,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    throw new Error('Login com Google ainda não implementado no frontend');
+  const signInWithGoogle = async (googleToken: string) => {
+    try {
+      const response = await authApi.googleAuth(googleToken);
+      const decoded = decodeToken(response.token);
+      
+      if (decoded) {
+        const customUser: CustomUser = {
+          id: decoded.sub || decoded.userId || decoded.id,
+          email: decoded.email || '',
+          name: decoded.name || decoded.username || '',
+          account_type: response.registered ? (decoded.userType || null) : null,
+          profileCompleted: response.registered,
+        };
+        
+        setUser(customUser);
+        localStorage.setItem('currentUser', JSON.stringify(customUser));
+      }
+    } catch (error: any) {
+      throw new Error(error.message || 'Erro ao fazer login com Google');
+    }
   };
 
   const completeProfile = async (metadata: CompleteProfileMetadata): Promise<string> => {
@@ -149,6 +168,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const updatedUser = { 
         ...user, 
+        userCode: clientId,
         account_type: metadata.accountType,
         profileCompleted: true,
       };
