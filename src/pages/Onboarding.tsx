@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Recycle, Package, ClipboardList, BarChart3 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Sidebar } from '../components/Sidebar';
+import suaDoacaoTransforma from '../assets/images/sua-doacao-transforma.png';
+import oQueDoar from '../assets/images/o-que-doar.png';
+import comoDoar from '../assets/images/como-doar.png';
+import seuImpacto from '../assets/images/seu-impacto.png';
 
 interface OnboardingSlide {
   id: number;
   title: string;
-  description: string;
-  icon: typeof Recycle;
+  description?: string;
+  steps?: string[];
+  image: string;
   bgGradient: string;
 }
 
@@ -17,28 +21,35 @@ const slides: OnboardingSlide[] = [
     id: 1,
     title: 'Sua Doação Transforma',
     description: 'Conectamos você aos pontos de coleta mais próximos e registramos o impacto positivo de cada quilo doado.',
-    icon: Recycle,
+    image: suaDoacaoTransforma,
     bgGradient: 'from-emerald-500 to-teal-600',
   },
   {
     id: 2,
     title: 'O que Doar',
     description: 'Aceitamos Plástico, Eletrônico, Papelão, Vidro e Metal. Sua doação contribui para a economia circular e preservação ambiental.',
-    icon: Package,
+    image: oQueDoar,
     bgGradient: 'from-blue-500 to-cyan-600',
   },
   {
     id: 3,
     title: 'Como Doar: Passo a Passo',
-    description: 'Separe o material, encontre um ponto de coleta próximo, entregue sua doação e registre com seu código de identificação.',
-    icon: ClipboardList,
+    steps: [
+      'Separe o material reciclável de acordo com as orientações de coleta (papel, plástico, metal, etc.)',
+      'Embale o material de forma segura',
+      'Cole no pacote o seu identificador único, utilizando fita adesiva, para garantir que sua doação seja registrada corretamente',
+      'Encontre um ponto de coleta próximo ao seu endereço',
+      'Entregue sua doação no local indicado',
+      'Após a entrega, o registro ficará disponível para visualização no site'
+    ],
+    image: comoDoar,
     bgGradient: 'from-teal-500 to-emerald-600',
   },
   {
     id: 4,
     title: 'Acompanhe Seu Impacto',
     description: 'Visualize o total de quilos doados e acompanhe seu histórico completo no Painel de Doações.',
-    icon: BarChart3,
+    image: seuImpacto,
     bgGradient: 'from-green-500 to-teal-600',
   },
 ];
@@ -67,7 +78,6 @@ export const Onboarding = () => {
   };
 
   const currentSlideData = slides[currentSlide];
-  const Icon = currentSlideData.icon;
   const isLastSlide = currentSlide === slides.length - 1;
 
   return (
@@ -81,21 +91,33 @@ export const Onboarding = () => {
       <div className="lg:pl-64 pt-16 lg:pt-0 min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="flex flex-col items-center">
-          <div className={`w-full aspect-square max-w-[320px] bg-gradient-to-br ${currentSlideData.bgGradient} rounded-3xl flex items-center justify-center mb-8 shadow-lg`}>
-            <div className="relative w-full h-full flex items-center justify-center">
-              <div className="w-32 h-32 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <Icon size={64} className="text-white" strokeWidth={1.5} />
-              </div>
-            </div>
+          <div className="w-full aspect-square max-w-[320px] rounded-3xl flex items-center justify-center mb-8 shadow-lg overflow-hidden">
+            <img 
+              src={currentSlideData.image} 
+              alt={currentSlideData.title}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
             {currentSlideData.title}
           </h2>
 
-          <p className="text-sm text-gray-600 text-center leading-relaxed mb-12 px-4">
-            {currentSlideData.description}
-          </p>
+          {currentSlideData.description && (
+            <p className="text-sm text-gray-600 text-center leading-relaxed mb-12 px-4">
+              {currentSlideData.description}
+            </p>
+          )}
+
+          {currentSlideData.steps && (
+            <ol className="text-sm text-gray-600 leading-relaxed mb-12 px-4 space-y-2 list-decimal list-inside text-left">
+              {currentSlideData.steps.map((step, index) => (
+                <li key={index} className="pl-2">
+                  {step}
+                </li>
+              ))}
+            </ol>
+          )}
 
           <div className="w-full flex items-center justify-between px-4">
             <div className="flex items-center gap-2">
