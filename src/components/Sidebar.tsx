@@ -16,7 +16,7 @@ export const Sidebar = ({ userName, onLogout }: SidebarProps) => {
   const menuItems = [
     { path: '/painel', label: 'Painel Inicial', icon: Home },
     { path: '/historico-doacoes', label: 'Doações', icon: Heart },
-    { path: '/informacoes', label: 'Informações', icon: Info },
+    { path: '/introducao', label: 'Informações', icon: Info },
   ];
 
   const isActive = (path: string) => location.pathname === path;

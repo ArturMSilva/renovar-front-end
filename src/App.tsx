@@ -9,7 +9,6 @@ import { CompleteBusiness } from './pages/CompleteBusiness';
 import { FinalConfirmation } from './pages/FinalConfirmation';
 import { Dashboard } from './pages/Dashboard';
 import { DonationHistory } from './pages/DonationHistory';
-import { InformationPage } from './pages/InformationPage';
 import { Onboarding } from './pages/Onboarding';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
@@ -139,15 +138,6 @@ function AppRoutes() {
         element={
           <DashboardRoute>
             <Dashboard />
-          </DashboardRoute>
-        }
-      />
-      
-      <Route
-        path="/informacoes"
-        element={
-          <DashboardRoute>
-            <InformationPage />
           </DashboardRoute>
         }
       />

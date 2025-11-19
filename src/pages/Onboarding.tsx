@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recycle, Package, ClipboardList, BarChart3 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { Sidebar } from '../components/Sidebar';
 
 interface OnboardingSlide {
   id: number;
@@ -44,6 +46,16 @@ const slides: OnboardingSlide[] = [
 export const Onboarding = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   const handleNext = () => {
     if (currentSlide < slides.length - 1) {
@@ -59,7 +71,14 @@ export const Onboarding = () => {
   const isLastSlide = currentSlide === slides.length - 1;
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white">
+      <Sidebar
+        userName={user?.name || 'Usuário'}
+        userCode={user?.userCode || user?.id?.substring(0, 8).toUpperCase() || 'N/A'}
+        onLogout={handleSignOut}
+      />
+      
+      <div className="lg:pl-64 pt-16 lg:pt-0 min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="flex flex-col items-center">
           <div className={`w-full aspect-square max-w-[320px] bg-gradient-to-br ${currentSlideData.bgGradient} rounded-3xl flex items-center justify-center mb-8 shadow-lg`}>
@@ -101,6 +120,7 @@ export const Onboarding = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
