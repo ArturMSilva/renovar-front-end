@@ -39,6 +39,7 @@ interface LoginRequest {
 interface LoginResponse {
   token: string;
   registered: boolean;
+  name?: string;
   user?: {
     id?: number;
     name?: string;
