@@ -1,8 +1,8 @@
 import { MessageCircle, HelpCircle } from 'lucide-react';
 
 export const SupportArea = () => {
-  const whatsappNumber = '5511999999999';
-  const whatsappMessage = encodeURIComponent('Olá Renovar, preciso de ajuda!');
+  const whatsappNumber = '558999734340';
+  const whatsappMessage = encodeURIComponent('Olá, Renovar! Preciso de suporte. Poderiam me ajudar, por favor?');
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
