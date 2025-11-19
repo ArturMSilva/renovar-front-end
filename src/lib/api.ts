@@ -88,6 +88,12 @@ export const authApi = {
     localStorage.setItem('authToken', response.data.token);
     return response.data;
   },
+
+  googleAuth: async (googleToken: string) => {
+    const response = await axiosInstance.post<LoginResponse>('/api/auth/google', { googleToken });
+    localStorage.setItem('authToken', response.data.token);
+    return response.data;
+  },
 };
 
 export const residenceApi = {
