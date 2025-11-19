@@ -37,7 +37,7 @@ export const Dashboard = () => {
       />
 
       {/* Mobile Code Badge - Fixed Top Right */}
-      <div className="lg:hidden fixed top-4 right-4 z-40 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-md">
+      <div className="lg:hidden fixed top-4 right-4 z-40 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-md text-right">
         <p className="text-xs text-gray-500 font-medium">Código Único</p>
         <p className="text-sm font-bold text-emerald-600">
           {formatUserId(user?.userCode || user?.id?.substring(0, 8).toUpperCase() || 'N/A')}
