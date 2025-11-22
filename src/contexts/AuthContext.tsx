@@ -26,6 +26,7 @@ interface CompleteProfileMetadata {
   cpf?: string;
   residentsCount?: string;
   cnpj?: string;
+  reasonSocial: string;
   address: {
     cep: string;
     street: string;
@@ -150,6 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
       } else if (metadata.accountType === 'business') {
         const response = await companyApi.completeProfile({
+          reasonSocial: metadata.reasonSocial || '',
           telefone: metadata.phone,
           cnpj: metadata.cnpj,
           addressRequest: {
