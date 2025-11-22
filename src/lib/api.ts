@@ -71,6 +71,7 @@ interface ProfileResponse {
 }
 
 interface CompanyProfileRequest {
+  reasonSocial: string;
   telefone: string;
   cnpj?: string;
   addressRequest: {
