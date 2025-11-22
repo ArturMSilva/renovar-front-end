@@ -1,4 +1,4 @@
-import { Leaf, ArrowLeft } from 'lucide-react';
+import { Recycle, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Sidebar } from '../components/Sidebar';
@@ -97,7 +97,7 @@ export const DonationHistory = () => {
                     <div key={record.id}>
                       <div className="flex items-center gap-4 px-6 py-4">
                         <div className="flex-shrink-0 w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center">
-                          <Leaf size={20} className="text-gray-600" />
+                          <Recycle size={20} className="text-emerald-600" />
                         </div>
 
                         <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export const DonationHistory = () => {
         {MOCK_RECORDS.length === 0 && (
           <div className="bg-white rounded-3xl p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Leaf size={32} className="text-gray-400" />
+              <Recycle size={32} className="text-emerald-600" />
             </div>
             <p className="text-gray-600 font-medium">Nenhuma doação registrada</p>
             <p className="text-sm text-gray-500 mt-1">Suas doações aparecerão aqui</p>
