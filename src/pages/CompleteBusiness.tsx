@@ -116,6 +116,7 @@ export const CompleteBusiness = () => {
       setLoading(true);
       const userId = await completeProfile({
         accountType: "business",
+        reasonSocial: formData.companyName,
         cnpj: formData.cnpj || undefined,
         phone: formData.phone,
         address: {
