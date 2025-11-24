@@ -18,6 +18,7 @@ interface AuthContextType {
   quickSignUp: (email: string, password: string, name: string) => Promise<void>;
   signInWithGoogle: (googleToken: string) => Promise<void>;
   completeProfile: (metadata: CompleteProfileMetadata) => Promise<string>;
+  fetchUserId: () => Promise<void>;
 }
 
 interface CompleteProfileMetadata {
@@ -183,6 +184,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchUserId = async () => {
+    if (!user || !user.account_type) {
+      throw new Error('Usuário não autenticado ou tipo de conta não definido');
+    }
+
+    try {
+      let response;
+      
+      if (user.account_type === 'residential') {
+        response = await residenceApi.getUserId();
+      } else if (user.account_type === 'business') {
+        response = await companyApi.getUserId();
+      } else {
+        throw new Error('Tipo de conta inválido');
+      }
+
+      const updatedUser = {
+        ...user,
+        userCode: response.userId.toString(),
+      };
+      
+      setUser(updatedUser);
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    } catch (error: any) {
+      throw new Error(error.message || 'Erro ao buscar ID do usuário');
+    }
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
@@ -192,6 +221,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       quickSignUp,
       signInWithGoogle,
       completeProfile,
+      fetchUserId,
     }}>
       {children}
     </AuthContext.Provider>
