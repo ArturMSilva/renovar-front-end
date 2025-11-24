@@ -46,7 +46,7 @@ export const FinalConfirmation = () => {
             diferença!
           </p>
 
-          <Button onClick={() => navigate("/painel")} className="w-full">
+          <Button onClick={() => navigate("/introducao")} className="w-full">
             Ir para Painel de Doações
           </Button>
         </div>
