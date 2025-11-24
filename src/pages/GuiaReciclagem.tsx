@@ -322,7 +322,7 @@ export const GuiaReciclagem = () => {
                       <div className="mb-4">
                         <h4 className="text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
                           <XCircle className="text-red-600" size={18} />
-                          <span>O que não é reciclável</span>
+                          <span>{material.id === 'papel' ? 'Não devem ir para reciclagem se contiverem:' : 'O que não é reciclável'}</span>
                         </h4>
                         <ul className="space-y-1">
                           {material.notRecyclable.map((item, index) => (
