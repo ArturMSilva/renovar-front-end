@@ -40,6 +40,7 @@ interface LoginResponse {
   token: string;
   registered: boolean;
   name?: string;
+  accountType?: 'residential' | 'business' | 'bussines'; 
   user?: {
     id?: number;
     name?: string;
