@@ -9,7 +9,7 @@ import { UserInfoHeader } from '../components/UserInfoHeader';
 import { formatUserId } from '../utils/validation';
 
 export const Dashboard = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, fetchUserId } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,6 +18,20 @@ export const Dashboard = () => {
       navigate('/introducao');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const loadUserId = async () => {
+      if (user && user.profileCompleted && !user.userCode && user.account_type) {
+        try {
+          await fetchUserId();
+        } catch (error) {
+          console.error('Erro ao buscar ID do usuário:', error);
+        }
+      }
+    };
+
+    loadUserId();
+  }, [user?.profileCompleted, user?.userCode, user?.account_type]);
 
   const handleSignOut = async () => {
     try {
