@@ -27,7 +27,7 @@ const slides: OnboardingSlide[] = [
   {
     id: 2,
     title: 'O que Doar',
-    description: 'Aceitamos Plástico, Eletrônico, Papelão, Vidro e Metal. Sua doação contribui para a economia circular e preservação ambiental.',
+    description: 'Aceitamos Latinhas de Alumínio, Papelão, Livros, Cadernos, Revistas e Folhas, Plásticos, Sucata de Ferro, Eletrônicos e Eletrodomésticos. Sua doação contribui para a economia circular e para a preservação ambiental.',
     image: oQueDoar,
     bgGradient: 'from-blue-500 to-cyan-600',
   },
