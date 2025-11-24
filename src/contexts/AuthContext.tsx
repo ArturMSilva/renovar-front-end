@@ -71,11 +71,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decoded = decodeToken(response.token);
       
       if (decoded) {
+        let accountType = response.accountType || decoded.userType || null;
+        if (accountType === 'bussines') {
+          accountType = 'business';
+        }
+        
         const customUser: CustomUser = {
           id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email || email,
           name: response.name || response.user?.name || decoded.name || decoded.username || '',
-          account_type: response.registered ? (decoded.userType || null) : null,
+          userCode: response.user?.id?.toString() || decoded.clientId || decoded.userId?.toString(),
+          account_type: response.registered ? accountType : null,
           profileCompleted: response.registered,
         };
         
@@ -110,11 +116,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decoded = decodeToken(response.token);
       
       if (decoded) {
+        let accountType = response.accountType || decoded.userType || null;
+        if (accountType === 'bussines') {
+          accountType = 'business';
+        }
+        
         const customUser: CustomUser = {
           id: decoded.sub || decoded.userId || decoded.id,
           email: decoded.email || response.user?.email || '',
           name: response.user?.name || decoded.name || decoded.username || '',
-          account_type: response.registered ? (decoded.userType || null) : null,
+          userCode: response.user?.id?.toString() || decoded.clientId || decoded.userId?.toString(),
+          account_type: response.registered ? accountType : null,
           profileCompleted: response.registered,
         };
         
