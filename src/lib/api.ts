@@ -70,6 +70,10 @@ interface ProfileResponse {
   message?: string;
 }
 
+interface UserIdResponse {
+  userId: number;
+}
+
 interface CompanyProfileRequest {
   reasonSocial: string;
   telefone: string;
@@ -109,11 +113,21 @@ export const residenceApi = {
     const response = await axiosInstance.post<ProfileResponse>('/api/residence/complete-profile', data);
     return response.data;
   },
+  
+  getUserId: async () => {
+    const response = await axiosInstance.get<UserIdResponse>('/api/residence/get-id');
+    return response.data;
+  },
 };
 
 export const companyApi = {
   completeProfile: async (data: CompanyProfileRequest) => {
     const response = await axiosInstance.post<ProfileResponse>('/api/company/complete-profile', data);
+    return response.data;
+  },
+  
+  getUserId: async () => {
+    const response = await axiosInstance.get<UserIdResponse>('/api/company/get-id');
     return response.data;
   },
 };
