@@ -15,7 +15,7 @@ import imagemPapel from "../assets/images/materials/papeis.jpeg";
 import imagemPlasticos from "../assets/images/materials/plasticos.jpeg";
 import imagemFerro from "../assets/images/materials/sucata-de-ferro.jpeg";
 import imagemEletronicos from "../assets/images/materials/eletronicos.jpeg";
-import imagemEletrodomesticos from "../assets/images/materials/eletronicos.jpeg";
+import imagemEletrodomesticos from "../assets/images/materials/eletrodomestico.jpeg";
 
 interface MaterialInfo {
   id: string;
