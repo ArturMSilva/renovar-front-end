@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Heart, Info, LogOut, Menu, X } from 'lucide-react';
+import { Home, Heart, BookOpen, LogOut, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface SidebarProps {
@@ -14,9 +14,9 @@ export const Sidebar = ({ userName, onLogout }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { path: '/painel', label: 'Painel Inicial', icon: Home },
+    { path: '/painel', label: 'Painel', icon: Home },
     { path: '/historico-doacoes', label: 'Doações', icon: Heart },
-    { path: '/introducao', label: 'Informações', icon: Info },
+    { path: '/guia-reciclagem', label: 'Guia de Reciclagem', icon: BookOpen },
   ];
 
   const isActive = (path: string) => location.pathname === path;
