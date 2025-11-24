@@ -10,6 +10,7 @@ import { FinalConfirmation } from './pages/FinalConfirmation';
 import { Dashboard } from './pages/Dashboard';
 import { DonationHistory } from './pages/DonationHistory';
 import { Onboarding } from './pages/Onboarding';
+import { GuiaReciclagem } from './pages/GuiaReciclagem';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
 function AppRoutes() {
@@ -156,6 +157,15 @@ function AppRoutes() {
         element={
           <DashboardRoute>
             <DonationHistory />
+          </DashboardRoute>
+        }
+      />
+      
+      <Route
+        path="/guia-reciclagem"
+        element={
+          <DashboardRoute>
+            <GuiaReciclagem />
           </DashboardRoute>
         }
       />
